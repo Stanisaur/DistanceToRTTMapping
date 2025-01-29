@@ -34,3 +34,4 @@ The spotter paper makes use of the normality assumption to nicely model a probab
 ## Limitations
 - Not enough data: roughly ~5000 data points were used, with >1000 unique probes. data was selected at random from the cloud atlas website which can be found [here](https://atlas.ripe.net/measurements/public), and then the ID's were taken and plugged into the API in the python script for ease of use.
 - RIPE ATLAS: These probes are compeletely different from the ones used in the Spotter paper so a comparison may not be completely fair
+- AS relationship: The script does record the Autonomous Systems(AS) relationship of each measurement(SAME, NEIGHBOURS, STRANGERS) but this is not leveraged in any way as I have not found any way to make use of it, though the script can easily be extended to incorporate this. Perhaps incorporating this will allow for extrapolation of distance for RTT's >80ms which is the limit for now.
