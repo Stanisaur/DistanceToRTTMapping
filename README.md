@@ -8,8 +8,9 @@ The purpose of this repsitory is to validate/compare the observations made about
 ### Original
 ![original](https://github.com/user-attachments/assets/ac776a7f-ffb8-4104-b02a-3fe8a9cf94e0)
 
-### Recreated
-![results](results.png)
+### Recreated (95% confidence interval for first figure)
+![recreated](https://github.com/user-attachments/assets/a54044d2-50e5-4d4d-9821-f8cc5aa5e86b)
+
 
 ## Requirements
 If you want to recreate the results you will need the following:
