@@ -93,31 +93,22 @@ else:
 
 #Following method of Spotter paper, we will filter out and values
 parsed = np.array(results)
-parsed = parsed[parsed[:, 1] < 55]
+parsed = parsed[parsed[:, 1] < 80]
 y = parsed[:, 0]
 X = parsed[:, 1].reshape(-1, 1)
 
-# put it all into nice dataframe
-# data = pd.DataFrame({
-#     'x': parsed[:, 1],
-#     'AS_relation': parsed[:, 2],
-#     'y': parsed[:, 0]
-# })
 
-# Explicitly define categories
+# Explicitly define categories in future
 # data['AS_relation'] = pd.Categorical(data['AS_relation'], categories=[0.0, 1.0, 2.0])
 
 # Fit polynomial using all data
-poly = PolynomialFeatures(degree=6, include_bias=True)
-
+poly = PolynomialFeatures(degree=(1,4), include_bias=False)
 # Robustly fit linear model with RANSAC algorithm
-# poly_ransac_model = make_pipeline(poly, linear_model.RANSACRegressor(random_state=42))
-# poly_ransac_model.fit(X, y)
+model = make_pipeline(poly, linear_model.LinearRegression(fit_intercept=False))
+model.fit(X, y)
 
-model = linear_model.LinearRegression()
-model.fit(X,y) 
 # Predict data of estimated models
-line_X = np.linspace(X.min(), 50, 1000)[:, np.newaxis]
+line_X = np.linspace(X.min(), 80, 1000)[:, np.newaxis]
 line_y = np.linspace(y.min(), y.max(), len(line_X))[:, np.newaxis]
 line_y_hat = model.predict(line_X)
 
@@ -140,30 +131,40 @@ def convert_to_probability_distribution(y_actual):
 # Create a figure with 3 subplots in a row
 fig, axes = plt.subplots(1, 3, figsize=(20, 6))
 
-# First plot: Scatter plot with regression line
+# First plot: Scatter plot with regression line and std deviation curves
+residuals = np.abs(y-y_pred)
+
+spread_model = make_pipeline(poly, linear_model.LinearRegression(fit_intercept=False))
+spread_model = spread_model.fit(X, residuals)
+predicted_spread = spread_model.predict(line_X)
+upper_bound = line_y_hat + (1.96 * predicted_spread)
+lower_bound = line_y_hat - (1.96 * predicted_spread)
+
 axes[0].scatter(X, y, marker=".")
-axes[0].plot(line_X, line_y_hat, color="red", linewidth=2, label="best fit line")
+axes[0].plot(line_X, line_y_hat, color="red", linewidth=2, label="μ(d)")
+axes[0].plot(line_X, upper_bound, color="blue",linestyle='dashed', linewidth=2, label="μ(d) + σ(d)")
+axes[0].plot(line_X, lower_bound, color="blue",linestyle='dashed', linewidth=2, label="μ(d) - σ(d)")
 axes[0].legend(loc="lower right")
-axes[0].set_xlabel("Round Trip Time (RTT)")
-axes[0].set_ylabel("Distance")
+axes[0].set_xlabel("Round Trip Time [ms]")
+axes[0].set_ylabel("great circle distance [km]")
+axes[1].set_title('Standardized Probability Distribution')
 
 # Second plot: Probability distribution
 z_scores, probabilities = convert_to_probability_distribution(y)
 axes[1].plot(z_scores, probabilities, 'b.')
-axes[1].set_xlabel('Z-scores')
-axes[1].set_ylabel('Probability Density')
-axes[1].set_title('Standardized Probability Distribution')
+axes[1].set_xlabel('z')
+axes[1].set_ylabel('Φ(z) standardised probability distribution')
 axes[1].grid(True)
 
 # Third plot: Normal probability plot
 axes[2].scatter(scale(y), scale(model.predict(X)))
 axes[2].plot([-3, 3], [-3, 3], 'r--')  # Reference line
-axes[2].set_xlabel('Standardized Distance Values')
-axes[2].set_ylabel('Standardized Expected Distance Values')
-axes[2].set_title('Normal Probability Plot')
+axes[2].set_xlabel('observed standardized value')
+axes[2].set_ylabel('Expected standardized value')
 axes[2].grid(True)
 
 # Adjust layout and display
 plt.tight_layout()
 plt.show()
+
 
