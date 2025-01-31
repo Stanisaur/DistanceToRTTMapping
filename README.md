@@ -14,10 +14,10 @@ The purpose of this repsitory is to validate/compare the observations made about
 ## Fitted coefficients
 The following coefficients are fitted for round trip times of <80ms as beyond that becomes far too spread. a polynomial model of degree 4 was chosen, though a simpler linear line could be used without much increase in error:
 ```math
-\mu(d) = 17.2876406d - 0.589392994d^2 + 0.0105034666d^3 - 0.0000441354642d^4
+\sigma(d) = 17.2876406d - 0.589392994d^2 + 0.0105034666d^3 - 0.0000441354642d^4
 ```
 ```math
-\sigma(d) = 49.6080905d - 0.237745386d^2 - 0.00328554308d^3 + 0.0000551577256d^4
+\mu(d) = 49.6080905d - 0.237745386d^2 - 0.00328554308d^3 + 0.0000551577256d^4
 ```
 
 ## Requirements
