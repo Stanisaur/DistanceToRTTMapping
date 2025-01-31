@@ -11,6 +11,14 @@ The purpose of this repsitory is to validate/compare the observations made about
 ### Recreated (95% confidence interval for first figure)
 ![recreated](https://github.com/user-attachments/assets/a54044d2-50e5-4d4d-9821-f8cc5aa5e86b)
 
+## Fitted coefficients
+The following coefficients are fitted for round trip times of <80ms as beyond that becomes far too spread. a polynomial model of degree 4 was chosen, though a simpler linear line could be used without much increase in error:
+```math
+\mu(d) = 17.2876406d - 0.589392994d^2 + 0.0105034666d^3 - 0.0000441354642d^4
+```
+```math
+\sigma(d) = 49.6080905d - 0.237745386d^2 - 0.00328554308d^3 + 0.0000551577256d^4
+```
 
 ## Requirements
 If you want to recreate the results you will need the following:
@@ -29,9 +37,9 @@ Then, to execute the script, simply run:
 python main.py
 ```
 ## Discussion
-There are some noticable differences. Firstly, the normality assumption has become less representitiave as the latencies are now right skewed. This could be a result of advances in networking efficiency over the last 14 years, now most nodes in the network are less bottlenecked by network congestion as the internet becomes more efficient. It is worth noting that the measurements used are taken in ideal conditions, with dedicated devices designed for this purpose, consumer devices will have higher RTT on average. measurements had to be clipped at RTT's of less than 80ms as the results were simply too noisy beyond that point to fit any sort of curve. A decision was made to go with a linear model as minimal gains were made with a polynomial one and the data gave rise to a polynomial with -ve coefficients which would trend down at certain points, which is not a possible relationship that the data can have.
+There are some noticable differences. Firstly, the normality assumption has become less representitiave as the latencies are now right skewed. This could be a result of advances in networking efficiency over the last 14 years, now most nodes in the network are less bottlenecked by network congestion as the internet becomes more efficient. It is worth noting that the measurements used are taken in ideal conditions, with dedicated devices designed for this purpose, consumer devices will have higher RTT on average. measurements had to be clipped at RTT's of less than 80ms as the results were simply too noisy beyond that point to fit any sort of curve.
 ## Implications
-The spotter paper makes use of the normality assumption to nicely model a probability distribution function where std. deviation is a function of distance in order to use multilateration to discover the location of an IP address. This seems to no longer be reliable. Perhaps a return to the flat rings approach is required, where by process of elimination we have a uniform zone of possibilties. Not the best, but still more reliable and much more trustworthy than probabilistic approaches given the volitility in the data.
+The spotter paper makes use of the normality assumption to nicely model a probability distribution function where std. deviation is a function of distance in order to use multilateration to discover the location of an IP address. This seems to still hold, although now variation has become much greater. Perhaps a return to the flat rings approach is required, where by process of elimination we have a uniform zone of possibilties. Not the best, but still more reliable and more trustworthy than probabilistic approaches given the volitility in the data.
 ## Limitations
 - Not enough data: roughly ~5000 data points were used, with >1000 unique probes. data was selected at random from the cloud atlas website which can be found [here](https://atlas.ripe.net/measurements/public), and then the ID's were taken and plugged into the API in the python script for ease of use.
 - RIPE ATLAS: These probes are compeletely different from the ones used in the Spotter paper so a comparison may not be completely fair
