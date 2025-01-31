@@ -5,7 +5,7 @@ exploring the relationship between Round Trip Time(RTT) and and Distance in KM, 
 > *2011 Proceedings IEEE INFOCOM*
 
 The purpose of this repsitory is to validate/compare the observations made about the ping vs distance relationship in the Spotter paper. here is a comparison of the results:
-### Original
+### Original (unknown confidence interval for first figure)
 ![original](https://github.com/user-attachments/assets/ac776a7f-ffb8-4104-b02a-3fe8a9cf94e0)
 
 ### Recreated (95% confidence interval for first figure)
